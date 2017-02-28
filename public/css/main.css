@@ -1,0 +1,55 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 100px;
+  padding-top: 70px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 100px;
+  background-color: #f5f5f5;
+}
+
+/**
+Colors
+*/
+.cl {
+    padding: 0px;
+    width: 30px;
+    height: 30px;
+}
+.cl1 {
+    background: #F00;
+}
+.cl2 {
+    background: #FF8000;
+}
+.cl3 {
+    background: #FFFF00;
+}
+.cl4 {
+    background: #00FF00;
+}
+.cl5 {
+    background: #00FFFF;
+}
+.cl6 {
+    background: #0000FF;
+}
+.cl7 {
+    background: #FF00FF;
+}
+
+.chooser {
+    margin: 10px 20px 0 0;
+    width: 80px;
+    height: 80px;
+}
