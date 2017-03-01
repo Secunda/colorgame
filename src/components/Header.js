@@ -9,9 +9,7 @@ const Header = (props) => {
                 </div>
                 <div id="navbar" className="collapse navbar-collapse">
                     <ul className="nav navbar-nav">
-                        <li className="active"><a href="#">Home</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li className="active"><a href="#" onClick={props.newGame}>Start New Game</a></li>
                     </ul>
                 </div>
             </div>

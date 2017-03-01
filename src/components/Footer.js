@@ -7,7 +7,7 @@ const Footer = (props) => {
         <footer className="footer">
             <div className="container text-center">
                 <div className="btn-group text-center" role="group">
-                    { props.listOfChoosers.map((cl, i) => { return <FooterChooser bg={cl} key={i} /> }) }
+                    { props.listOfChoosers.map((cl, i) => { return <FooterChooser nextStep={props.nextStep} bg={cl} key={i} /> }) }
                 </div>
             </div>
         </footer>

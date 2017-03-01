@@ -6,10 +6,7 @@ const TableRow = (props) => {
     return(
         <div className="row">
             { [...new Array(props.cols)].map((val, i) => {
-                let randomIndex = Math.floor(Math.random() * props.listOfChoosers.length),
-                    bg = props.listOfChoosers[randomIndex];
-
-                return <TableCell bg={bg} key={i} /> 
+                return <TableCell bg={props.row[i]} key={i} /> 
             }) }
         </div>
     )
