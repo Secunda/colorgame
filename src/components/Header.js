@@ -1,20 +1,25 @@
 import React from 'react'
 
+import { Nav, NavItem, Navbar } from 'react-bootstrap';
+
 const Header = (props) => {
-    return(
-        <nav className="navbar navbar-default navbar-fixed-top">
-            <div className="container">
-                <div className="navbar-header">
-                    <a className="navbar-brand" href="#">Color Game</a>
-                </div>
-                <div id="navbar" className="collapse navbar-collapse">
-                    <ul className="nav navbar-nav">
-                        <li className="active"><a href="#" onClick={props.newGame}>Start New Game</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    )
+    const navbarInstance = (
+        <Navbar collapseOnSelect>
+            <Navbar.Header>
+                <Navbar.Brand>
+                    <a href="#">ColorGame</a>
+                </Navbar.Brand>
+                <Navbar.Toggle />
+            </Navbar.Header>
+            <Navbar.Collapse>
+                <Nav>
+                    <NavItem eventKey={1} href="#" onClick={props.newGame}>Start New Game</NavItem>
+                </Nav>
+            </Navbar.Collapse>
+        </Navbar>
+    );
+
+    return navbarInstance;
 }
 
 export default Header

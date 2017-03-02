@@ -22,6 +22,9 @@ class Layout extends React.Component {
         this.props.dispatch(this.startNewGame())
     }
 
+    /**
+     * Method for starting new game
+     */
     startNewGame() {
         let state = this.gameTable.startNewGame();
         this.matrix = state.matrix;
@@ -29,6 +32,9 @@ class Layout extends React.Component {
         return state;
     }
 
+    /**
+     * Method for generating next step
+     */
     nextStep() {
         let state = this.gameTable.nextStep();
         this.matrix = state.matrix;
@@ -36,12 +42,18 @@ class Layout extends React.Component {
         return state;
     }
 
+    /**
+     * New game handler
+     */
     newGameHandler = (e) => {
         e.preventDefault();
 
         this.props.dispatch(this.startNewGame())
     }
 
+    /**
+     * Next step handler
+     */
     nextStepHandler = (e) => {
         e.preventDefault();
 
@@ -50,7 +62,7 @@ class Layout extends React.Component {
 
     render() {
         return (
-            <div className="App">
+            <div className="app flex-container">
                 <Header newGame={this.newGameHandler} />
                 <Content cols={this.cols} rows={this.rows} matrix={this.matrix} />
                 <Footer listOfChoosers={this.listOfChoosers} nextStep={this.nextStepHandler} />

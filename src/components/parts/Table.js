@@ -4,7 +4,7 @@ import TableRow from './TableRow'
 
 const Table = (props) => {
     return(
-        <div>
+        <div className='game-container'>
             { [...new Array(props.rows)].map((val, i) => 
                 { return <TableRow cols={props.cols} row={props.matrix[i]} key={i} /> }) }
         </div>

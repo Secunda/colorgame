@@ -8,6 +8,9 @@ var Table = class {
         this.score = 0;
     }
 
+    /**
+     * Generating new game matrix with randow values
+     */
     generateGame() {
         let gameMatrix = [...new Array(this.rows)].map((currentRow) => {
             return [...new Array(this.cols)].map((currentCols) => {
@@ -21,16 +24,28 @@ var Table = class {
         return gameMatrix;
     }
 
+    /**
+     * Calculating current score
+     */
     calcScore() {
-        this.score = 0;
-        return 0;
+        return ++this.score;
     }
 
-    startNewGame() {
+    /**
+     * Necessary cleaning for new game
+     */
+    clearOldStateAndGenerateNewOne() {
         this.step = 0;
         this.score = 0;
 
         this.matrix = this.generateGame();
+    }
+
+    /**
+     * State for starting new game
+     */
+    startNewGame() {
+        this.clearOldStateAndGenerateNewOne();
 
         return {
             type: "START_GAME",
@@ -39,6 +54,9 @@ var Table = class {
         }
     }
 
+    /**
+     * State for game step
+     */
     nextStep() {
         this.step++;
 
