@@ -1,3 +1,5 @@
+import Logic from "./Logic"
+
 var Table = class {
     constructor() {
         this.listOfChoosers = ['cl1', 'cl2', 'cl3', 'cl4', 'cl5', 'cl6', 'cl7'];
@@ -6,6 +8,9 @@ var Table = class {
 
         this.step = 0;
         this.score = 0;
+        this.matrix = [];
+
+        this.logic = new Logic();
     }
 
     /**
@@ -20,6 +25,7 @@ var Table = class {
                 return bg;
             });
         });
+        
         
         return gameMatrix;
     }
@@ -50,14 +56,16 @@ var Table = class {
         return {
             type: "START_GAME",
             matrix: this.matrix,
-            score: this.calcScore()
+            score: this.calcScore(),
+            step: this.step
         }
     }
 
     /**
      * State for game step
      */
-    nextStep() {
+    nextStep(currentColor) {
+        this.matrix = this.logic.step(currentColor, this.matrix);
         this.step++;
 
         return {

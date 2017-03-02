@@ -16,6 +16,8 @@ class Layout extends React.Component {
         this.listOfChoosers = this.gameTable.listOfChoosers;
         this.cols = this.gameTable.cols;
         this.rows = this.gameTable.rows;
+        this.score = this.gameTable.score;
+        this.step = this.gameTable.step;
     }
 
     componentWillMount() {
@@ -28,6 +30,8 @@ class Layout extends React.Component {
     startNewGame() {
         let state = this.gameTable.startNewGame();
         this.matrix = state.matrix;
+        this.score = state.score;
+        this.step = state.step;
 
         return state;
     }
@@ -35,9 +39,11 @@ class Layout extends React.Component {
     /**
      * Method for generating next step
      */
-    nextStep() {
-        let state = this.gameTable.nextStep();
+    nextStep(currentColor) {
+        let state = this.gameTable.nextStep(currentColor);
         this.matrix = state.matrix;
+        this.score = state.score;
+        this.step = state.step;
 
         return state;
     }
@@ -54,16 +60,16 @@ class Layout extends React.Component {
     /**
      * Next step handler
      */
-    nextStepHandler = (e) => {
+    nextStepHandler = (e, currentChoose) => {
         e.preventDefault();
 
-        this.props.dispatch(this.nextStep())
+        this.props.dispatch(this.nextStep(currentChoose))
     }
 
     render() {
         return (
             <div className="app flex-container">
-                <Header newGame={this.newGameHandler} />
+                <Header newGame={this.newGameHandler} score={this.score} step={this.step} />
                 <Content cols={this.cols} rows={this.rows} matrix={this.matrix} />
                 <Footer listOfChoosers={this.listOfChoosers} nextStep={this.nextStepHandler} />
             </div>
