@@ -44,9 +44,7 @@ var Logic = class {
                              * with limitation by current index. For it we create additional 
                              * array with values - row index and column index
                              */
-                            if (rowIndex > 0) {
-                                arrayWithIndexesForAdditionalChecks.push([rowIndex, colIndex]);
-                            }
+                            arrayWithIndexesForAdditionalChecks.push([rowIndex, colIndex]);
                         }
                     }
 
@@ -59,9 +57,66 @@ var Logic = class {
                 });
             });
 
-            
+            if (arrayWithIndexesForAdditionalChecks.length) {
+                let columnNumber = newMatrix[0].length;
+
+                arrayWithIndexesForAdditionalChecks.forEach((data) => {
+                    let row, col;
+                    [row, col] = data;
+
+                    if (row === 0) {
+                        let nextRow = row + 1;
+                        for (let i = 0; i < col; i++) {
+                            newMatrix = this.additionalTableCalculation(
+                                newMatrix, nextRow, i, previousColor, currentColor
+                            );
+                        }
+                    } else if(row > 0 && row < columnNumber - 1) {
+                        let nextRow = row + 1;
+                        let previousRow = row - 1;
+                        for (let i = 0; i < col; i++) {
+                            newMatrix = this.additionalTableCalculation(
+                                newMatrix, nextRow, i, previousColor, currentColor
+                            );
+                            newMatrix = this.additionalTableCalculation(
+                                newMatrix, previousRow, i, previousColor, currentColor
+                            );
+                        }
+                    } else {
+                        let previousRow = row - 1;
+                        for (let i = 0; i < col; i++) {
+                            newMatrix = this.additionalTableCalculation(
+                                newMatrix, previousRow, i, previousColor, currentColor
+                            );
+                        }
+                    }
+                });
+            }
 
             return newMatrix;
+        }
+
+        return matrix;
+    }
+
+    additionalTableCalculation(matrix, row, col, previousColor, currentColor) {
+        if (
+            typeof matrix[row] !== "undefined"
+            && typeof matrix[row][col] !== "undefined"
+            && matrix[row][col] === previousColor
+        ) {
+            /**
+             * Change current color
+             */
+            matrix[row][col] = currentColor;
+
+            /**
+             * Try to find neighboring cells and check for our logic
+             */
+            matrix = this.additionalTableCalculation(matrix, row - 1, col, previousColor, currentColor);
+            matrix = this.additionalTableCalculation(matrix, row, col + 1, previousColor, currentColor);
+            matrix = this.additionalTableCalculation(matrix, row + 1, col, previousColor, currentColor);
+            matrix = this.additionalTableCalculation(matrix, row, col - 1, previousColor, currentColor);
         }
 
         return matrix;
