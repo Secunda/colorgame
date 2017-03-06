@@ -77,6 +77,26 @@ var Table = class {
             currentColor: currentColor
         }
     }
+
+    /**
+     * Switch game table size
+     */
+    switchSize(rowNumbers, colNumbers) {
+        this.rows = rowNumbers;
+        this.cols = colNumbers;
+
+        this.clearOldStateAndGenerateNewOne();
+
+        return {
+            type: "CHANGE_TABLE_SIZE",
+            matrix: this.matrix,
+            score: this.score,
+            step: this.step,
+            currentColor: this.matrix[0][0],
+            colNumbers: this.cols,
+            rowNumbers: this.rows
+        }
+    }
 }
 
 export default Table

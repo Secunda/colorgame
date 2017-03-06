@@ -14,8 +14,6 @@ class Layout extends React.Component {
         this.gameTable = new Table();
 
         this.listOfChoosers = this.gameTable.listOfChoosers;
-        this.cols = this.gameTable.cols;
-        this.rows = this.gameTable.rows;
     }
 
     componentWillMount() {
@@ -41,6 +39,15 @@ class Layout extends React.Component {
     }
 
     /**
+     * Method for changing table size
+     */
+    switchSize = (rowNumbers, colNumbers) => {
+        let state = this.gameTable.switchSize(rowNumbers, colNumbers);
+
+        return state;
+    }
+
+    /**
      * New game handler
      */
     newGameHandler = (e) => {
@@ -55,9 +62,21 @@ class Layout extends React.Component {
     nextStepHandler = (e, currentChoose) => {
         e.preventDefault();
 
+        /**
+         * If color is equal to current, won't do any actions
+         */
         if (this.props.game.currentColor !== currentChoose) {
             this.props.dispatch(this.nextStep(currentChoose))
         }
+    }
+
+    /**
+     * Switch game table size handler
+     */
+    switchTableSize = (e, rowNumbers, colNumbers) => {
+        e.preventDefault();
+
+        this.props.dispatch(this.switchSize(rowNumbers, colNumbers))
     }
 
     render() {
@@ -65,8 +84,9 @@ class Layout extends React.Component {
 
         return (
             <div className="app flex-container">
-                <Header newGame={this.newGameHandler} score={game.score} step={game.step} />
-                <Content cols={this.cols} rows={this.rows} matrix={game.matrix} />
+                <Header newGame={this.newGameHandler} score={game.score} step={game.step}
+                    switchSize={this.switchTableSize} />
+                <Content cols={game.colNumbers} rows={game.rowNumbers} matrix={game.matrix} />
                 <Footer listOfChoosers={this.listOfChoosers} nextStep={this.nextStepHandler} />
             </div>
         );

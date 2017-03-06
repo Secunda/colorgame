@@ -19,12 +19,13 @@ const Header = (props) => {
 
             <Navbar.Collapse>
                 <Nav>
-                    <NavItem eventKey={1} href="#" onClick={props.newGame}>Start New Game</NavItem>
+                    <NavItem onClick={props.newGame}>Start New Game</NavItem>
 
                     <NavDropdown title="Options" id="game-options">
-                        <MenuItem>10x10</MenuItem>
-                        <MenuItem>15x15</MenuItem>
-                        <MenuItem>20x20</MenuItem>
+                        <Navbar.Text>Game Size:</Navbar.Text>
+                        <MenuItem onClick={() => props.switchSize(event, 10, 10)}>10x10</MenuItem>
+                        <MenuItem onClick={() => props.switchSize(event, 15, 15)}>15x15</MenuItem>
+                        <MenuItem onClick={() => props.switchSize(event, 20, 20)}>20x20</MenuItem>
                     </NavDropdown>
                 </Nav>
             </Navbar.Collapse>
