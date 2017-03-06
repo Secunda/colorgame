@@ -34,7 +34,7 @@ var Table = class {
      * Calculating current score
      */
     calcScore() {
-        return this.logic.calcScore(this.score);
+        return this.logic.getScore(this.score);
     }
 
     /**
@@ -68,11 +68,12 @@ var Table = class {
     nextStep(currentColor) {
         this.matrix = this.logic.step(currentColor, this.matrix);
         this.step++;
+        this.score = this.calcScore();
 
         return {
             type: "GAME_STEP",
             matrix: this.matrix,
-            score: this.calcScore(),
+            score: this.score,
             step: this.step,
             currentColor: currentColor
         }

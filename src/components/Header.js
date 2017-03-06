@@ -21,8 +21,7 @@ const Header = (props) => {
                 <Nav>
                     <NavItem onClick={props.newGame}>Start New Game</NavItem>
 
-                    <NavDropdown title="Options" id="game-options">
-                        <Navbar.Text>Game Size:</Navbar.Text>
+                    <NavDropdown title="Game Size" id="game-options">
                         <MenuItem onClick={() => props.switchSize(event, 10, 10)}>10x10</MenuItem>
                         <MenuItem onClick={() => props.switchSize(event, 15, 15)}>15x15</MenuItem>
                         <MenuItem onClick={() => props.switchSize(event, 20, 20)}>20x20</MenuItem>

@@ -1,19 +1,20 @@
 var Logic = class {
     constructor() {
-        this.cells = 0;
-        this.previousCells = this.cells;
+        this.previousCells = 0;
+        this.currentCells = 0;
     }
 
     step = (currentColor, matrix) => {
-        this.previousCells = this.cells;
-
-        this.cells = 0;
-
         if (matrix.length) {
             // previous color
             let previousColor = matrix[0][0],
                 isAllowedApplyChangesRows = true,
                 arrayWithIndexesForAdditionalChecks = [];
+
+            /**
+             * Calculate the number of marked cells by previous color
+             */
+            this.previousCells = this.calcScore(matrix, previousColor);
 
             let newMatrix = matrix.map((rowData, rowIndex) => {
                 /**
@@ -45,8 +46,6 @@ var Logic = class {
                          * we will change it for current choosen color
                          */
                         if (color === previousColor) {
-                            this.cells++;
-
                             return currentColor;
                         } else {
                             /**
@@ -103,12 +102,20 @@ var Logic = class {
                 });
             }
 
+            /**
+             * Calculate the number of marked cells by current color
+             */
+            this.currentCells = this.calcScore(newMatrix, currentColor);
+
             return newMatrix;
         }
 
         return matrix;
     }
 
+    /**
+     * Additional checks for set current color of cells by using cross method
+     */
     additionalTableCalculation(matrix, row, col, previousColor, currentColor) {
         if (
             typeof matrix[row] !== "undefined"
@@ -119,8 +126,6 @@ var Logic = class {
              * Change current color
              */
             matrix[row][col] = currentColor;
-
-            this.cells++;
 
             /**
              * Try to find neighboring cells and check for our logic
@@ -134,9 +139,80 @@ var Logic = class {
         return matrix;
     }
 
-    calcScore(currentScore) {
-        console.log(this.previousCells, this.cells)
-        return ++currentScore;
+    /**
+     * Calculate the number of cells with provided color by using cross method
+     */
+    calculateIdenticalCells(matrix, statusMatrix, color, row = 0, col = 0) {
+        let numberOfCells = 0;
+
+        if (matrix.length) {
+            if (statusMatrix[row][col] !== 1 && matrix[row][col] === color) {
+                numberOfCells++;
+
+                statusMatrix[row][col] = 1;
+
+                /**
+                 * The same column, but row higher on one 
+                 */
+                if ((row - 1) >= 0) {
+                    numberOfCells += this.calculateIdenticalCells(matrix, statusMatrix, color, row - 1, col);
+                }
+                /**
+                 * The same row, but next column
+                 */
+                if ((col + 1) < matrix[0].length) {
+                    numberOfCells += this.calculateIdenticalCells(matrix, statusMatrix,  color, row, col + 1);
+                }
+                /**
+                 * The same column, but row below on one
+                 */
+                if ((row + 1) < matrix.length) {
+                    numberOfCells += this.calculateIdenticalCells(matrix, statusMatrix, color, row + 1, col);
+                }
+                /**
+                 * The same row, but previous column
+                 */
+                if ((col - 1) >= 0) {
+                    numberOfCells += this.calculateIdenticalCells(matrix, statusMatrix, color, row, col - 1);
+                }
+            }
+        }
+
+        return numberOfCells;
+    }
+
+    /**
+     * Wrapper for calculating cells number 
+     */
+    calcScore(matrix, color) {
+        if (matrix.length) {
+            /**
+             * Create empty array with matrix structure to set which cell was handled
+             */
+            let statusMatrix = [...Array(matrix.length)].map(
+                () => {
+                    return [...Array(matrix[0].length)].map(() => {
+                        return 0;
+                    })
+                }
+            );
+
+            let row = 0,
+                col = 0;
+
+            return this.calculateIdenticalCells(matrix, statusMatrix, color, row, col);
+        }
+
+        return 0;
+    }
+
+    /**
+     * Calculate score
+     */
+    getScore(score) {
+        let newCells = this.currentCells - this.previousCells;
+        
+        return score + Math.ceil(newCells * Math.pow(1.1, newCells));
     }
 
 }
