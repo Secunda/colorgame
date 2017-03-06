@@ -1,6 +1,14 @@
 var Logic = class {
+    constructor() {
+        this.cells = 0;
+        this.previousCells = this.cells;
+    }
 
     step = (currentColor, matrix) => {
+        this.previousCells = this.cells;
+
+        this.cells = 0;
+
         if (matrix.length) {
             // previous color
             let previousColor = matrix[0][0],
@@ -37,6 +45,8 @@ var Logic = class {
                          * we will change it for current choosen color
                          */
                         if (color === previousColor) {
+                            this.cells++;
+
                             return currentColor;
                         } else {
                             /**
@@ -110,6 +120,8 @@ var Logic = class {
              */
             matrix[row][col] = currentColor;
 
+            this.cells++;
+
             /**
              * Try to find neighboring cells and check for our logic
              */
@@ -120,6 +132,11 @@ var Logic = class {
         }
 
         return matrix;
+    }
+
+    calcScore(currentScore) {
+        console.log(this.previousCells, this.cells)
+        return ++currentScore;
     }
 
 }

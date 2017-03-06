@@ -1,4 +1,4 @@
-import Logic from "./Logic"
+import Logic from "../core/Logic"
 
 var Table = class {
     constructor() {
@@ -9,14 +9,14 @@ var Table = class {
         this.step = 0;
         this.score = 0;
         this.matrix = [];
-
-        this.logic = new Logic();
     }
 
     /**
      * Generating new game matrix with randow values
      */
     generateGame() {
+        this.logic = new Logic();
+
         let gameMatrix = [...new Array(this.rows)].map((currentRow) => {
             return [...new Array(this.cols)].map((currentCols) => {
                 let randomIndex = Math.floor(Math.random() * this.listOfChoosers.length),
@@ -34,7 +34,7 @@ var Table = class {
      * Calculating current score
      */
     calcScore() {
-        return ++this.score;
+        return this.logic.calcScore(this.score);
     }
 
     /**
@@ -56,7 +56,7 @@ var Table = class {
         return {
             type: "START_GAME",
             matrix: this.matrix,
-            score: this.calcScore(),
+            score: this.score,
             step: this.step
         }
     }

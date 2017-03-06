@@ -10,8 +10,9 @@ export default function reducer(state={
         return {
           ...state, 
           started: true,
+          step: action.step,
           matrix: action.matrix,
-          score: action.score
+          score: action.score,
         }
       }
       case "GAME_STEP": {

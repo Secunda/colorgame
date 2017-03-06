@@ -5,7 +5,7 @@ import Header from "./Header"
 import Footer from "./Footer"
 import Content from "./Content"
 
-import Table from "../core/Table"
+import Table from "../actions/Table"
 
 class Layout extends React.Component {
     constructor(props) {
@@ -16,8 +16,6 @@ class Layout extends React.Component {
         this.listOfChoosers = this.gameTable.listOfChoosers;
         this.cols = this.gameTable.cols;
         this.rows = this.gameTable.rows;
-        this.score = this.gameTable.score;
-        this.step = this.gameTable.step;
     }
 
     componentWillMount() {
@@ -29,9 +27,6 @@ class Layout extends React.Component {
      */
     startNewGame() {
         let state = this.gameTable.startNewGame();
-        this.matrix = state.matrix;
-        this.score = state.score;
-        this.step = state.step;
 
         return state;
     }
@@ -41,9 +36,6 @@ class Layout extends React.Component {
      */
     nextStep(currentColor) {
         let state = this.gameTable.nextStep(currentColor);
-        this.matrix = state.matrix;
-        this.score = state.score;
-        this.step = state.step;
 
         return state;
     }
@@ -67,10 +59,12 @@ class Layout extends React.Component {
     }
 
     render() {
+        const { game } = this.props;
+
         return (
             <div className="app flex-container">
-                <Header newGame={this.newGameHandler} score={this.score} step={this.step} />
-                <Content cols={this.cols} rows={this.rows} matrix={this.matrix} />
+                <Header newGame={this.newGameHandler} score={game.score} step={game.step} />
+                <Content cols={this.cols} rows={this.rows} matrix={game.matrix} />
                 <Footer listOfChoosers={this.listOfChoosers} nextStep={this.nextStepHandler} />
             </div>
         );
@@ -78,9 +72,9 @@ class Layout extends React.Component {
 }
 
 function mapStateToProps (state) {
-  return {
-    game: {}
-  }
+    return {
+        game: state.game
+    }
 }
 
 export default connect(mapStateToProps)(Layout)
