@@ -55,7 +55,9 @@ class Layout extends React.Component {
     nextStepHandler = (e, currentChoose) => {
         e.preventDefault();
 
-        this.props.dispatch(this.nextStep(currentChoose))
+        if (this.props.game.currentColor !== currentChoose) {
+            this.props.dispatch(this.nextStep(currentChoose))
+        }
     }
 
     render() {

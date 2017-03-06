@@ -4,6 +4,7 @@ export default function reducer(state={
     score: 0,
     started: false,
     finished: false,
+    currentColor: ""
   }, action) {
     switch (action.type) {
       case "START_GAME": {
@@ -13,6 +14,7 @@ export default function reducer(state={
           step: action.step,
           matrix: action.matrix,
           score: action.score,
+          currentColor: action.currentColor,
         }
       }
       case "GAME_STEP": {
@@ -20,7 +22,8 @@ export default function reducer(state={
           ...state, 
           step: action.step,
           matrix: action.matrix,
-          score: action.score
+          score: action.score,
+          currentColor: action.currentColor,
         }
       }
       /* no default */

@@ -9,12 +9,12 @@ const Header = (props) => {
                 <Navbar.Brand>
                     <a href="#">ColorGame</a>
                 </Navbar.Brand>
-                
-                <Navbar.Toggle />
 
                 <Navbar.Text>
                     <b>Score</b> {props.score} | <b>Step</b> {props.step}
                 </Navbar.Text>
+                
+                <Navbar.Toggle />
             </Navbar.Header>
 
             <Navbar.Collapse>

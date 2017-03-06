@@ -57,7 +57,8 @@ var Table = class {
             type: "START_GAME",
             matrix: this.matrix,
             score: this.score,
-            step: this.step
+            step: this.step,
+            currentColor: this.matrix[0][0]
         }
     }
 
@@ -72,7 +73,8 @@ var Table = class {
             type: "GAME_STEP",
             matrix: this.matrix,
             score: this.calcScore(),
-            step: this.step
+            step: this.step,
+            currentColor: currentColor
         }
     }
 }
