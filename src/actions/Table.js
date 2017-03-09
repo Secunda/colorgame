@@ -46,7 +46,7 @@ export function startNewGame(matrix) {
  */
 export function nextStep(currentColor, props) {
     let logic = new Logic(),
-        matrix = logic.step(currentColor, props.matrix);
+        matrix = logic.newStep(currentColor, props.matrix);
 
     return {
         type: GAME_STEP,

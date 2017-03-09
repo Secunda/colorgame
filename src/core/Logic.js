@@ -4,6 +4,52 @@ let Logic = class {
         this.currentCells = 0;
     }
 
+    newStep(currentColor, matrix) {
+        let newMatrix = matrix.slice();
+        if (newMatrix.length) {
+            let statusMatrix = this.generateStatusMatrix(newMatrix),
+                previousColor = newMatrix[0][0];
+
+            return this.tableCalculation(newMatrix, statusMatrix, previousColor, currentColor);
+        }
+        
+        return newMatrix;
+    }
+
+    tableCalculation(matrix, statusMatrix, previousColor, color, row = 0, col = 0) {
+        if (statusMatrix[row][col] !== 1 && matrix[row][col] === previousColor) {
+            matrix[row][col] = color;
+            statusMatrix[row][col] = 1;
+            
+            /**
+             * The same column, but row higher on one 
+             */
+            if ((row - 1) >= 0) {
+                matrix = this.tableCalculation(matrix, statusMatrix, previousColor, color, row - 1, col);
+            }
+            /**
+             * The same row, but next column
+             */
+            if ((col + 1) < matrix[0].length) {
+                matrix = this.tableCalculation(matrix, statusMatrix, previousColor, color, row, col + 1);
+            }
+            /**
+             * The same column, but row below on one
+             */
+            if ((row + 1) < matrix.length) {
+                matrix = this.tableCalculation(matrix, statusMatrix, previousColor, color, row + 1, col);
+            }
+            /**
+             * The same row, but previous column
+             */
+            if ((col - 1) >= 0) {
+                matrix = this.tableCalculation(matrix, statusMatrix, previousColor, color, row, col - 1);
+            }
+        }
+
+        return matrix;
+    }
+
     step = (currentColor, matrix) => {
         if (matrix.length) {
             // previous color
@@ -70,8 +116,7 @@ let Logic = class {
                 let columnNumber = newMatrix[0].length;
 
                 arrayWithIndexesForAdditionalChecks.forEach((data) => {
-                    let row, col;
-                    [row, col] = data;
+                    let [row, col] = data;
 
                     if (row === 0) {
                         let nextRow = row + 1;
@@ -189,15 +234,8 @@ let Logic = class {
             /**
              * Create empty array with matrix structure to set which cell was handled
              */
-            let statusMatrix = [...Array(matrix.length)].map(
-                () => {
-                    return [...Array(matrix[0].length)].map(() => {
-                        return 0;
-                    })
-                }
-            );
-
-            let row = 0,
+            let statusMatrix = this.generateStatusMatrix(matrix),
+                row = 0,
                 col = 0;
 
             return this.calculateIdenticalCells(matrix, statusMatrix, color, row, col);
@@ -211,8 +249,21 @@ let Logic = class {
      */
     getScore(score) {
         let newCells = this.currentCells - this.previousCells;
-        
         return score + Math.ceil(newCells * Math.pow(1.1, newCells));
+    }
+
+    /**
+     * Generate status matrix for correct handling
+     * @param {Array} matrix 
+     */
+    generateStatusMatrix(matrix) {
+        return [...Array(matrix.length)].map(
+            () => {
+                return [...Array(matrix[0].length)].map(() => {
+                    return 0;
+                })
+            }
+        );
     }
 
 }

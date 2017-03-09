@@ -16,8 +16,8 @@ class Layout extends React.Component {
         this.props.dispatch(this.startNewGame())
     }
 
-    componentWillUpdate() {
-        console.log(arguments)
+    componentWillUpdate(state) {
+        console.log(state)
     }
 
     /**
