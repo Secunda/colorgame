@@ -5,46 +5,60 @@ import Header from "./Header"
 import Footer from "./Footer"
 import Content from "./Content"
 
-import Table from "../actions/Table"
+import { 
+    generateGame, startNewGame, nextStep, calcScore, switchSize
+} from "../actions/Table"
+
+import { LIST_OF_CHOOSERS } from '../constants/DefaultGameOptions';
 
 class Layout extends React.Component {
-    constructor(props) {
-        super(props);
-        
-        this.gameTable = new Table();
-
-        this.listOfChoosers = this.gameTable.listOfChoosers;
-    }
-
     componentWillMount() {
         this.props.dispatch(this.startNewGame())
+    }
+
+    componentWillUpdate() {
+        console.log(arguments)
     }
 
     /**
      * Method for starting new game
      */
     startNewGame() {
-        let state = this.gameTable.startNewGame();
-
-        return state;
+        return (dispatch, getState) => {
+            dispatch(generateGame(getState().game));
+            dispatch(startNewGame(getState().game.matrix));
+        }
     }
 
     /**
      * Method for generating next step
      */
     nextStep(currentColor) {
-        let state = this.gameTable.nextStep(currentColor);
+        let { game } = this.props,
+            previousColor = game.currentColor,
+            previousMatrix = game.matrix,
+            gameStep = nextStep(currentColor, game);
+        
+        return (dispatch, getState) => {
+            dispatch(gameStep);
 
-        return state;
+            let { game } = getState(),
+                currentColor = game.currentColor,
+                currentMatrix = game.matrix,
+                score = game.score;
+
+            dispatch(calcScore(score, previousColor, previousMatrix, currentColor, currentMatrix));
+        }
     }
 
     /**
      * Method for changing table size
      */
     switchSize = (rowNumbers, colNumbers) => {
-        let state = this.gameTable.switchSize(rowNumbers, colNumbers);
-
-        return state;
+        return (dispatch, getState) => {
+            dispatch(switchSize(rowNumbers, colNumbers));
+            dispatch(this.startNewGame());
+        }
     }
 
     /**
@@ -73,7 +87,7 @@ class Layout extends React.Component {
     /**
      * Switch game table size handler
      */
-    switchTableSize = (e, rowNumbers, colNumbers) => {
+    switchTableSizeHandler = (e, rowNumbers, colNumbers) => {
         e.preventDefault();
 
         this.props.dispatch(this.switchSize(rowNumbers, colNumbers))
@@ -85,9 +99,9 @@ class Layout extends React.Component {
         return (
             <div className="app flex-container">
                 <Header newGame={this.newGameHandler} score={game.score} step={game.step}
-                    switchSize={this.switchTableSize} />
+                    switchSize={this.switchTableSizeHandler} />
                 <Content cols={game.colNumbers} rows={game.rowNumbers} matrix={game.matrix} />
-                <Footer listOfChoosers={this.listOfChoosers} nextStep={this.nextStepHandler} />
+                <Footer listOfChoosers={LIST_OF_CHOOSERS} nextStep={this.nextStepHandler} />
             </div>
         );
     };

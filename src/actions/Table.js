@@ -1,103 +1,93 @@
 import Logic from "../core/Logic"
 
-var Table = class {
-    constructor() {
-        this.listOfChoosers = ['cl1', 'cl2', 'cl3', 'cl4', 'cl5', 'cl6', 'cl7'];
-        this.cols = 20;
-        this.rows = 20; 
+import { 
+    GENERATE_GAME, START_GAME, CHANGE_TABLE_SIZE, GAME_STEP, CALCULATE_SCORE
+} from '../constants/ActionTypes';
+import { LIST_OF_CHOOSERS } from '../constants/DefaultGameOptions';
 
-        this.step = 0;
-        this.score = 0;
-        this.matrix = [];
-    }
+/**
+ * Generating new game matrix with randow values
+ * @param {Object} props 
+ */
+export function generateGame(props) {
+    let gameMatrix = [...new Array(props.rowNumbers)].map((currentRow) => {
+        return [...new Array(props.colNumbers)].map((currentCols) => {
+            let randomIndex = Math.floor(Math.random() * LIST_OF_CHOOSERS.length),
+                bg = LIST_OF_CHOOSERS[randomIndex];
 
-    /**
-     * Generating new game matrix with randow values
-     */
-    generateGame() {
-        this.logic = new Logic();
-
-        let gameMatrix = [...new Array(this.rows)].map((currentRow) => {
-            return [...new Array(this.cols)].map((currentCols) => {
-                let randomIndex = Math.floor(Math.random() * this.listOfChoosers.length),
-                    bg = this.listOfChoosers[randomIndex];
-
-                return bg;
-            });
+            return bg;
         });
-        
-        
-        return gameMatrix;
-    }
+    });
+    
+    return {
+        type: GENERATE_GAME,
+        matrix: gameMatrix
+    };
+}
 
-    /**
-     * Calculating current score
-     */
-    calcScore() {
-        return this.logic.getScore(this.score);
-    }
-
-    /**
-     * Necessary cleaning for new game
-     */
-    clearOldStateAndGenerateNewOne() {
-        this.step = 0;
-        this.score = 0;
-
-        this.matrix = this.generateGame();
-    }
-
-    /**
-     * State for starting new game
-     */
-    startNewGame() {
-        this.clearOldStateAndGenerateNewOne();
-
-        return {
-            type: "START_GAME",
-            matrix: this.matrix,
-            score: this.score,
-            step: this.step,
-            currentColor: this.matrix[0][0]
-        }
-    }
-
-    /**
-     * State for game step
-     */
-    nextStep(currentColor) {
-        this.matrix = this.logic.step(currentColor, this.matrix);
-        this.step++;
-        this.score = this.calcScore();
-
-        return {
-            type: "GAME_STEP",
-            matrix: this.matrix,
-            score: this.score,
-            step: this.step,
-            currentColor: currentColor
-        }
-    }
-
-    /**
-     * Switch game table size
-     */
-    switchSize(rowNumbers, colNumbers) {
-        this.rows = rowNumbers;
-        this.cols = colNumbers;
-
-        this.clearOldStateAndGenerateNewOne();
-
-        return {
-            type: "CHANGE_TABLE_SIZE",
-            matrix: this.matrix,
-            score: this.score,
-            step: this.step,
-            currentColor: this.matrix[0][0],
-            colNumbers: this.cols,
-            rowNumbers: this.rows
-        }
+/**
+ * Starting new game
+ * @param {Array} matrix 
+ */
+export function startNewGame(matrix) {
+    return {
+        type: START_GAME,
+        matrix: matrix,
+        score: 0,
+        step: 0,
+        currentColor: matrix[0][0]
     }
 }
 
-export default Table
+/**
+ * Action for game step
+ * @param {String} currentColor 
+ * @param {Object} props 
+ */
+export function nextStep(currentColor, props) {
+    let logic = new Logic(),
+        matrix = logic.step(currentColor, props.matrix);
+
+    return {
+        type: GAME_STEP,
+        matrix: matrix,
+        step: ++props.step,
+        currentColor: currentColor
+    }
+}
+
+/**
+ * Calculating current score
+ * @param {Number} score 
+ * @param {String} previousColor 
+ * @param {Array} previousMatrix 
+ * @param {String} currentColor 
+ * @param {Array} currentMatrix 
+ */
+export function calcScore(score, previousColor, previousMatrix, currentColor, currentMatrix) {
+    let logic = new Logic();
+
+    /**
+     * Manual score calculation 
+     */
+    logic.currentCells = logic.calcScore(currentMatrix, currentColor);
+    logic.previousCells = logic.calcScore(previousMatrix, previousColor);
+
+    return {
+        type: CALCULATE_SCORE,
+        score: logic.getScore(score)
+    }
+}
+
+/**
+ * Change game matrix size 
+ * @param {Number} rowNumbers 
+ * @param {Number} colNumbers 
+ */
+export function switchSize(rowNumbers, colNumbers) {
+    return {
+        type: CHANGE_TABLE_SIZE,
+        colNumbers: colNumbers,
+        rowNumbers: rowNumbers
+    }
+}

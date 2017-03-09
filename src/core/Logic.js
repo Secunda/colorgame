@@ -1,4 +1,4 @@
-var Logic = class {
+let Logic = class {
     constructor() {
         this.previousCells = 0;
         this.currentCells = 0;
