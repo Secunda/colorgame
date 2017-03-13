@@ -5,6 +5,8 @@ import {
 } from '../constants/ActionTypes';
 import { LIST_OF_CHOOSERS } from '../constants/DefaultGameOptions';
 
+import _ from 'lodash'
+
 /**
  * Generating new game matrix with randow values
  * @param {Object} props 
@@ -32,7 +34,7 @@ export function generateGame(props) {
 export function startNewGame(matrix) {
     return {
         type: START_GAME,
-        matrix: matrix,
+        matrix: _.cloneDeep(matrix),
         score: 0,
         step: 0,
         currentColor: matrix[0][0]
@@ -46,12 +48,15 @@ export function startNewGame(matrix) {
  */
 export function nextStep(currentColor, props) {
     let logic = new Logic(),
-        matrix = logic.newStep(currentColor, props.matrix);
+        matrix = _.cloneDeep(props.matrix),
+        step = _.clone(props.step);
+
+    matrix = logic.newStep(currentColor, matrix);
 
     return {
         type: GAME_STEP,
         matrix: matrix,
-        step: ++props.step,
+        step: ++step,
         currentColor: currentColor
     }
 }
