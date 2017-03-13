@@ -4,9 +4,10 @@ import { connect } from 'react-redux'
 import Header from "./Header"
 import Footer from "./Footer"
 import Content from "./Content"
+import FinishedPopup from "./parts/FinishedPopup"
 
 import { 
-    generateGame, startNewGame, nextStep, calcScore, switchSize
+    generateGame, startNewGame, nextStep, calcScore, switchSize, isGameFinished
 } from "../actions/Table"
 
 import { LIST_OF_CHOOSERS } from '../constants/DefaultGameOptions';
@@ -36,8 +37,9 @@ class Layout extends React.Component {
     nextStep(currentColor) {
         let { game } = this.props,
             previousColor = game.currentColor,
-            previousMatrix = game.matrix,
-            gameStep = nextStep(currentColor, game);
+            previousMatrix = game.matrix;
+
+        let gameStep = nextStep(currentColor, game);
         
         return (dispatch, getState) => {
             dispatch(gameStep);
@@ -48,6 +50,7 @@ class Layout extends React.Component {
                 score = game.score;
 
             dispatch(calcScore(score, previousColor, previousMatrix, currentColor, currentMatrix));
+            dispatch(isGameFinished(currentMatrix));
         }
     }
 
@@ -93,6 +96,12 @@ class Layout extends React.Component {
         this.props.dispatch(this.switchSize(rowNumbers, colNumbers))
     }
 
+    closeFinishedModalHandler = (e) => {
+        e.preventDefault();
+
+        this.newGameHandler(e);
+    }
+
     render() {
         const { game } = this.props;
 
@@ -102,6 +111,8 @@ class Layout extends React.Component {
                     switchSize={this.switchTableSizeHandler} />
                 <Content cols={game.colNumbers} rows={game.rowNumbers} matrix={game.matrix} />
                 <Footer listOfChoosers={LIST_OF_CHOOSERS} nextStep={this.nextStepHandler} />
+                <FinishedPopup closeFinishedModal={this.closeFinishedModalHandler} finished={game.finished}
+                    score={game.score} />
             </div>
         );
     };

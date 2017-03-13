@@ -1,6 +1,6 @@
 import { 
     GENERATE_GAME, START_GAME, CHANGE_TABLE_SIZE, GAME_STEP, 
-    CALCULATE_SCORE 
+    CALCULATE_SCORE, IS_GAME_FINISHED
 } from '../constants/ActionTypes';
 import { COLS, ROWS } from '../constants/DefaultGameOptions';
 
@@ -36,6 +36,7 @@ export default function reducer(state={
             return {
                 ...state, 
                 started: true,
+                finished: false,
                 step: action.step,
                 matrix: action.matrix,
                 score: action.score,
@@ -61,6 +62,12 @@ export default function reducer(state={
             return {
                 ...state, 
                 score: action.score,
+            }
+        }
+        case IS_GAME_FINISHED: {
+            return {
+                ...state,
+                finished: action.finished
             }
         }
         /* no default */

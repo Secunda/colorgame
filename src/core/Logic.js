@@ -149,6 +149,22 @@ let Logic = class {
         );
     }
 
+    /**
+     * Check that game is finished after each step
+     * @param {Array} matrix 
+     */
+    isGameFinished(matrix) {
+        const currentColor = matrix[0][0];
+
+        let finished = matrix.every((rowData, rowIndex) => {
+            return rowData.every((colData, colIndex) => {
+                return colData === currentColor;
+            });
+        });
+console.log(finished)
+        return finished;
+    }
+
 }
 
 export default Logic

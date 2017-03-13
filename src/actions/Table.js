@@ -1,7 +1,7 @@
 import Logic from "../core/Logic"
 
 import { 
-    GENERATE_GAME, START_GAME, CHANGE_TABLE_SIZE, GAME_STEP, CALCULATE_SCORE
+    GENERATE_GAME, START_GAME, CHANGE_TABLE_SIZE, GAME_STEP, CALCULATE_SCORE, IS_GAME_FINISHED
 } from '../constants/ActionTypes';
 import { LIST_OF_CHOOSERS } from '../constants/DefaultGameOptions';
 
@@ -94,5 +94,14 @@ export function switchSize(rowNumbers, colNumbers) {
         type: CHANGE_TABLE_SIZE,
         colNumbers: colNumbers,
         rowNumbers: rowNumbers
+    }
+}
+
+export function isGameFinished(matrix) {
+    let logic = new Logic();
+
+    return {
+        type: IS_GAME_FINISHED,
+        finished: logic.isGameFinished(matrix)
     }
 }
