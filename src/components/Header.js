@@ -22,10 +22,10 @@ const Header = (props) => {
                     <NavItem onClick={props.newGame}>Start New Game</NavItem>
 
                     <NavDropdown title="Game Size" id="game-options">
-                        <MenuItem onClick={() => props.switchSize(event, 5, 5)}>5x5</MenuItem>
-                        <MenuItem onClick={() => props.switchSize(event, 10, 10)}>10x10</MenuItem>
-                        <MenuItem onClick={() => props.switchSize(event, 15, 15)}>15x15</MenuItem>
-                        <MenuItem onClick={() => props.switchSize(event, 20, 20)}>20x20</MenuItem>
+                        <MenuItem onClick={(event) => props.switchSize(event, 5, 5)}>5x5</MenuItem>
+                        <MenuItem onClick={(event) => props.switchSize(event, 10, 10)}>10x10</MenuItem>
+                        <MenuItem onClick={(event) => props.switchSize(event, 15, 15)}>15x15</MenuItem>
+                        <MenuItem onClick={(event) => props.switchSize(event, 20, 20)}>20x20</MenuItem>
                     </NavDropdown>
                 </Nav>
             </Navbar.Collapse>
